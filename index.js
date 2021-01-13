@@ -1,15 +1,20 @@
 const express =  require('express');
 const app = express();
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-
-// connect DB
-mongoose.connect('mongodb+srv://ites-jwt:iteslab@my-card.cx3k4.mongodb.net/jwt?retryWrites=true&w=majority', { useUnifiedTopology: true }, ()=>{
-  console.log('connected to db SUCCESS !')  
-})
-
 // Import Routes
 const authRoute = require('./routes/auth');
 
+dotenv.config();
+//Connect to DB
+mongoose.connect(process.env.DB_CONNECT, { useUnifiedTopology: true }, ()=>{
+  console.log('connected to db SUCCESS !')  
+})
+
+//Middleware
+app.use(express.json());
+
+//Route Middlewares
 app.use('/api/user', authRoute);
 
 app.listen(3000, ()=> console.log('Server Up & Running '));
